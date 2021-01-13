@@ -37,6 +37,8 @@ class PodOptions {
 
     private String imagePullSecret
 
+    private String schedulerName;
+
     private Collection<PodEnv> envVars
 
     private Collection<PodMountConfig> mountConfigMaps
@@ -70,6 +72,7 @@ class PodOptions {
     }
 
     @PackageScope void create(Map<String,String> entry) {
+        println(entry)
         if( entry.env && entry.value ) {
             envVars << PodEnv.value(entry.env, entry.value)
         }
@@ -94,6 +97,9 @@ class PodOptions {
         else if( entry.imagePullSecret || entry.imagePullSecrets ) {
             this.imagePullSecret = entry.imagePullSecret ?: entry.imagePullSecrets
         }
+        else if( entry.schedulerName ) {
+            this.schedulerName = entry.schedulerName as String
+        }
         else if( entry.label && entry.value ) {
             this.labels.put(entry.label as String, entry.value as String)
         }
@@ -110,7 +116,7 @@ class PodOptions {
             this.annotations.put(entry.annotation as String, entry.value as String)
         }
         else 
-            throw new IllegalArgumentException("Unknown pod options: $entry")
+            throw new IllegalArgumentException("Unknown NEW NEW pod options: $entry")
     }
 
 
@@ -154,6 +160,13 @@ class PodOptions {
         return this
     }
 
+    String getSchedulerName() { schedulerName }
+
+    PodOptions setSchedulerName( String schedulerName ) {
+        this.schedulerName = schedulerName
+        return this
+    }
+
     PodOptions plus( PodOptions other ) {
         def result = new PodOptions()
         // env vars
@@ -192,6 +205,11 @@ class PodOptions {
             result.imagePullSecret = other.imagePullSecret
         else
             result.imagePullSecret = imagePullSecret
+
+        if (other.schedulerName)
+            result.schedulerName = other.schedulerName
+        else
+            result.schedulerName = schedulerName
 
         // labels
         result.labels.putAll(labels)

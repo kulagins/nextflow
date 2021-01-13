@@ -61,6 +61,8 @@ class K8sConfig implements Map<String,Object> {
         else if( target.imagePullPolicy )
             podOptions.imagePullPolicy = target.imagePullPolicy.toString()
 
+        if( target.schedulerName )
+            podOptions.schedulerName = target.schedulerName.toString()
         // -- shortcut to pod security context
         if( target.runAsUser != null )
             podOptions.securityContext = new PodSecurityContext(target.runAsUser)

@@ -40,6 +40,8 @@ class PodSpecBuilder {
 
     String podName
 
+    String schedulerName
+
     String imageName
 
     String imagePullPolicy
@@ -102,6 +104,12 @@ class PodSpecBuilder {
         this.imagePullPolicy = policy
         return this
     }
+
+    PodSpecBuilder withScheduler(String schedulerName) {
+        this.schedulerName = schedulerName
+        return this
+    }
+
 
     PodSpecBuilder withWorkDir( String path ) {
         this.workDir = path
@@ -170,8 +178,8 @@ class PodSpecBuilder {
     }
 
 
-    PodSpecBuilder withEnv( PodEnv var ) {
-        envVars.add(var)
+    PodSpecBuilder withEnv( PodEnv v ) {
+        envVars.add(v)
         return this
     }
 
@@ -226,6 +234,8 @@ class PodSpecBuilder {
             imagePullPolicy = opts.imagePullPolicy
         if( opts.imagePullSecret )
             imagePullSecret = opts.imagePullSecret
+        if( opts.schedulerName )
+            schedulerName = opts.schedulerName
         // -- env vars
         if( opts.getEnvVars() )
             envVars.addAll( opts.getEnvVars() )
@@ -305,6 +315,10 @@ class PodSpecBuilder {
                 restartPolicy: restart,
                 containers: [ container ],
         ]
+
+        if(this.schedulerName){
+            spec.schedulerName = this.schedulerName
+        }
 
         if( nodeSelector )
             spec.nodeSelector = nodeSelector.toSpec()
