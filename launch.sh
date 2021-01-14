@@ -123,7 +123,7 @@ while [ "$*" != "" ]; do
 done
 
 # Show some variable when in DEBUG mode
-if [ "$DEBUG" != '' ]; then
+if [ "$DEBUG" == '' ]; then
   echo Launch environment
   echo ------------------
   echo base_dir: $base_dir

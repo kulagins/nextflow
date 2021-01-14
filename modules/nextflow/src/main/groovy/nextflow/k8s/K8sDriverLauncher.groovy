@@ -457,6 +457,7 @@ class K8sDriverLauncher {
     protected Map makeLauncherSpec() {
         assert runName
         assert k8sClient
+        println('IN LAUNCHER SPEC')
 
         // -- setup config file
         String cmd = "source /etc/nextflow/init.sh; ${getLaunchCli()}"
@@ -474,6 +475,7 @@ class K8sDriverLauncher {
             .withEnv( PodEnv.value('NXF_ASSETS', k8sConfig.getProjectDir()) )
             .withEnv( PodEnv.value('NXF_EXECUTOR', 'k8s'))
             .withEnv( PodEnv.value('NXF_ANSI_LOG', 'false'))
+            .withScheduler("multi-scheduler")
             .build()
 
         // note: do *not* set the work directory because it may need to be created  by the init script
