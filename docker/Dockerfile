@@ -16,6 +16,7 @@ RUN git clone https://github.com/kulagins/nextflow \
  && cd nextflow \
  && git checkout schedulerNameBranch \
  && make compile
+RUN cp /nextflow/nextflow /usr/local/bin
 COPY entry.sh /usr/local/bin/entry.sh
 #COPY nextflow /usr/local/bin/nextflow
 #COPY nextflow-dist/modules /usr/local/bin/modules
@@ -24,7 +25,7 @@ COPY entry.sh /usr/local/bin/entry.sh
 # download runtime
 RUN mkdir /.nextflow \
  && touch /.nextflow/dockerized \
-# && chmod 755 /usr/local/bin/nextflow \
+ && chmod 755 /usr/local/bin/nextflow \
  && chmod 755 /usr/local/bin/entry.sh 
  # && nextflow info
 
