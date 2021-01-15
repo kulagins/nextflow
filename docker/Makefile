@@ -15,8 +15,12 @@
 
 version ?= none
 
-build: dist/docker 
-	cp ../nextflow .
+
+
+build: dist/docker
+	mkdir -p nextflow-dist
+	cp -r ../modules nextflow-dist/modules	 
+	cp ../launch.sh .
 	docker build -t nextflow/nextflow:${version} .
 
 dist/docker:

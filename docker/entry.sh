@@ -37,21 +37,22 @@
 
 # wrap cli args with single quote to avoid wildcard expansion
 cli=''; for x in "$@"; do cli+="'$x' "; done
-
+echo $cli
 # the NXF_USRMAP hold the user ID in the host environment 
 if [[ "$NXF_USRMAP" ]]; then
 # create a `nextflow` user with the provided ID 
 # then change the docker socker ownership to `nextflow` user 
 addgroup docker
 adduser -u $NXF_USRMAP -G docker -s /bin/bash -D nextflow
-chown nextflow /var/run/docker.sock  
+chown /nextflow/launch.sh /var/run/docker.sock  
 # finally run the target command with `nextflow` user
-su nextflow << EOF
+su /nextflow/launch.sh << EOF
 [[ "$NXF_DEBUG_ENTRY" ]] && set -x
-exec bash -c "$cli"
+# exec bash -c "$cli"
+exec bash -c "/nextflow/launch.sh"
 EOF
 
 # otherwise just execute the command
 else 
-exec bash -c "$cli"
+exec bash -c "/nextflow/launch.sh"
 fi
